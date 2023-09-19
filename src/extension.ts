@@ -10,8 +10,6 @@ export interface StyleObject {
     [key: string]: string[]
 }
 
-let loadingMessage: any;
-
 const classNameObject = new Object as StyleObject;
 const attributeObject = new Object as StyleObject;
 
@@ -23,24 +21,39 @@ export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('swiftcss.helloWorld', () => {
 		//loadingMessage = vscode.window.showInformationMessage('Loading Extension...', 'Cancel');
 		createObject(styleCSS, classNameObject, attributeObject);
-		console.log(attributeObject["transition-delay: 100ms"]);
 		vscode.window.showInformationMessage('SwiftCSS is ready to be used!');
+		
+
+		vscode.window.onDidChangeActiveTextEditor((event: vscode.TextEditor | undefined) => {
+			console.log(event);
+		});
+
+		vscode.languages.registerHoverProvider('javascript', {
+			provideHover(document, position, token) {
+			  return {
+				contents: ['Hover Content']
+			  };
+			}
+		});
     });
 
 	// Register the provider for multiple file types
-	const supportedLanguages = ['html', 'typescript', 'php', 'javascriptreact', 'typescriptreact', 'plaintext', 'javascript', 'json']; // Add the language IDs you want to support
+	// Add the language IDs you want to support
+	const supportedLanguages = ['html', 'typescript', 'php', 'javascriptreact', 'typescriptreact', 'plaintext', 'javascript', 'json'];
 
 	const _provideCompletionItems = {provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
-		const whiteSpace = /^(?:[ \t]+)/gm;
-		const linePrefix = document.lineAt(position).text.substr(0, position.character);
-		const lineString = document.lineAt(position).text.trim();
-		
-		// Returns the string of what we actually are writing
-		const currentString = extractInputString(lineString.substring(0, (position.character - 4)));
+		const lineString = document.lineAt(position).text;
 
 		// We use Regex to extract the part that we are interested in
-		const processedString = processLineString(lineString);
-		console.log(currentString);
+		//const processedString = processLineString(lineString, position.character);
+
+
+		// Returns the string of what we actually are writing
+		const currentString = extractInputString(lineString.substring(0, position.character));
+
+		if(!currentString){ return; }
+
+		console.log(`CurrentString: ${currentString}`);
 		console.log(position);
 
 		// Position is an object of c: row number, and e:
@@ -49,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const uniqueLabels = new Set();
 
 		
-		const completionItems: vscode.CompletionItem[] = [];
+		const completionItems: vscode.CompletionItem[] = new Array;
 		for(const key in classNameObject){
 			if(key.includes(currentString)){
 
@@ -77,11 +90,6 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		for(const key in attributeObject){
-			if(key.startsWith('padding')){
-				// Key = padding-left: 20px;
-				// attributeObject[key] => [pl-20, px-20]
-			}
-
 			// Check if the attribute matches the typed text
 			if (key.includes(currentString) || currentString.includes(key)){
 				const _PRE_CLASS_NAME = attributeObject[key];
