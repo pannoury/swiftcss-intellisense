@@ -15,6 +15,9 @@
       "resolveProvider": "true"
     }
   },
+  "activationEvents": [
+    "onCommand:extension.activate"
+  ],
   "categories": [
     "Other"
   ],
