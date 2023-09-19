@@ -40,7 +40,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// We use Regex to extract the part that we are interested in
 		const processedString = processLineString(lineString);
-		console.log(lineString.substring(0, position.character), lineString.substring(0, (position.character - 4)));
 		console.log(currentString);
 		console.log(position);
 
@@ -108,8 +107,6 @@ export function activate(context: vscode.ExtensionContext) {
 							uniqueLabels.add(key);
 						}
 					}
-
-					
 				});
 			}
 		}
@@ -118,17 +115,32 @@ export function activate(context: vscode.ExtensionContext) {
 			if(currentString.includes(pseudoClass) || pseudoClass.includes(currentString)){
 				// Create the window that will show information
 				const documentation = new vscode.MarkdownString();
-				documentation.appendMarkdown(`<span style="color: yellow;">${pseudoClass}:</span>`);
-				documentation.appendMarkdown('\n\n---\n\n');
 				documentation.appendCodeblock(`Attribute triggered when user ${pseudoClass}.`);
 				documentation.appendCodeblock(`Specified by ${pseudoClass}:<SwiftCSS class>`);
 
 				const commitCharacterCompletion = new vscode.CompletionItem(`${pseudoClass}:`, 6);
 				commitCharacterCompletion.commitCharacters = ['.'];
 				commitCharacterCompletion.documentation = documentation;
+				commitCharacterCompletion.detail = `${pseudoClass}: Add a CSS attribute to be triggered when user makes a certain action`;
 
 				suggestionArray.push(commitCharacterCompletion);
 				uniqueLabels.add(pseudoClass);
+			}
+		});
+
+		dynamicClasses.forEach((dynamicClass) => {
+			if(currentString.includes(dynamicClass) || dynamicClass.includes(currentString)){
+				// Create the window that will show information
+				const documentation = new vscode.MarkdownString();
+				documentation.appendCodeblock(`${dynamicClass}-[#000] or ${dynamicClass}-[#f4f4f4]`);
+
+				const commitCharacterCompletion = new vscode.CompletionItem(`${dynamicClass}-`, 6);
+				commitCharacterCompletion.commitCharacters = ['.'];
+				commitCharacterCompletion.documentation = documentation;
+				commitCharacterCompletion.detail = `Dynamic class that allows you to specify the CSS attribute within the square brackets "[]". Value for bg & color has to start with "#" followed by 3 or 6 characters`;
+
+				suggestionArray.push(commitCharacterCompletion);
+				uniqueLabels.add(dynamicClass);
 			}
 		});
 
