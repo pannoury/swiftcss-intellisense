@@ -28,14 +28,13 @@ export interface Config {
 	}
 }
 
-export const classNameObject = new Object as StyleObject;
-export const attributeObject = new Object as StyleObject;
+
 
 export async function activate(context: vscode.ExtensionContext) {
 	let config: Config | undefined | null; // Will hold the config file
 	const extensionDir = vscode.extensions.getExtension('PatrickTannoury.swiftcss')!.extensionPath;
 	const styleCSS = fs.readFileSync(path.join(extensionDir, 'style.css'), 'utf-8');
-	createObject(styleCSS, classNameObject, attributeObject);
+	const completionItems = createObject(styleCSS);
 
 	const acceptedStyling = ['className', 'style-light', 'style-dark']; // We will push in screens provided in config file
 
@@ -62,129 +61,20 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	const _provideCompletionItems = {
-		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
-			const lineString = document.lineAt(position).text;
+		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext){
+			//const lineString = document.lineAt(position).text;
 
 			// We use Regex to extract the part that we are interested in
 			//const processedString = processLineString(lineString, position.character);
 
 
 			// Returns the string of what we actually are writing
-			const currentString = extractInputString(lineString.substring(0, position.character));
+			//const currentString = extractInputString(lineString.substring(0, position.character));
 
-			if (!currentString) { return; }
+			// Position is an object of c: row number, and e
 
-			// Position is an object of c: row number, and e:
+			//const spaceIndex = rangeReplace(document, lineString, position);
 
-			const suggestionArray = new Array;
-			const uniqueLabels = new Set();
-
-			const spaceIndex = rangeReplace(document, lineString, position);
-
-			const completionItems: vscode.CompletionItem[] = new Array;
-
-			// When user is typing a CSS classname
-			for (const key in classNameObject) {
-				try {
-					if (key.includes(currentString)) {
-	
-						// Create the window that will show information
-						const documentation = new vscode.MarkdownString();
-						// Each key has an array, so we need to iterate through and 
-						// append the attribute (multi attribute) the key holds
-						classNameObject[key].forEach((attribute) => {
-							documentation.appendCodeblock(`${attribute.trim()}`, 'css');
-						});
-	
-						// @ts-ignore
-						//const rangeToReplace = new vscode.Range(spaceIndex, position.character);
-	
-						console.log(rangeToReplace);
-	
-						const commitCharacterCompletion = new vscode.CompletionItem(key);
-						commitCharacterCompletion.commitCharacters = ['.'];
-						commitCharacterCompletion.documentation = documentation;
-						commitCharacterCompletion.filterText = key;
-						commitCharacterCompletion.detail = key;
-						//commitCharacterCompletion.range = rangeToReplace;
-	
-						// Add the completion item to the list
-						if (!uniqueLabels.has(key)) {
-							suggestionArray.push(commitCharacterCompletion);
-							uniqueLabels.add(key);
-						}
-					}
-				} catch (err) {
-					console.log(`Error in parsing classNames: ${err}`);
-				}
-			}
-
-			// When user is writing a CSS attribute
-			for (const key in attributeObject) {
-				// Check if the attribute matches the typed text
-				if (key.includes(currentString) || currentString.includes(key)) {
-					const _PRE_CLASS_NAME = attributeObject[key];
-
-					_PRE_CLASS_NAME.forEach((className) => {
-						if (_PRE_CLASS_NAME.length === 1) {
-							// Create the window that will show information
-							const documentation = new vscode.MarkdownString();
-							// Each key has an array, so we need to iterate through and 
-							// append the attribute (multi attribute) the key holds
-							documentation.appendCodeblock(`${className.trim()}`, 'css');
-
-							const commitCharacterCompletion = new vscode.CompletionItem(`${key}`);
-							commitCharacterCompletion.insertText = `${className}`;
-							commitCharacterCompletion.filterText = className;
-							commitCharacterCompletion.commitCharacters = ['.'];
-							commitCharacterCompletion.documentation = documentation;
-							commitCharacterCompletion.detail = key;
-							//commitCharacterCompletion.range = new vscode.Range(position, position);
-
-							// Add the completion item to the list
-							if (!uniqueLabels.has(key)) {
-								suggestionArray.push(commitCharacterCompletion);
-								uniqueLabels.add(key);
-							}
-						}
-					});
-				}
-			}
-
-			pseudoClasses.forEach((pseudoClass) => {
-				if (currentString.includes(pseudoClass) || pseudoClass.includes(currentString)) {
-					// Create the window that will show information
-					const documentation = new vscode.MarkdownString();
-					documentation.appendCodeblock(`Attribute triggered when user ${pseudoClass}.`);
-					documentation.appendCodeblock(`Specified by ${pseudoClass}:<SwiftCSS class>`);
-
-					const commitCharacterCompletion = new vscode.CompletionItem(`${pseudoClass}:`, 6);
-					commitCharacterCompletion.commitCharacters = ['.'];
-					commitCharacterCompletion.documentation = documentation;
-					commitCharacterCompletion.detail = `${pseudoClass}: Add a CSS attribute to be triggered when user makes a certain action`;
-
-					suggestionArray.push(commitCharacterCompletion);
-					uniqueLabels.add(pseudoClass);
-				}
-			});
-
-			dynamicClasses.forEach((dynamicClass) => {
-				if (currentString.includes(dynamicClass) || dynamicClass.includes(currentString)) {
-					// Create the window that will show information
-					const documentation = new vscode.MarkdownString();
-					documentation.appendCodeblock(`${dynamicClass}-[#000] or ${dynamicClass}-[#f4f4f4]`);
-
-					const commitCharacterCompletion = new vscode.CompletionItem(`${dynamicClass}-`, 6);
-					commitCharacterCompletion.commitCharacters = ['.'];
-					commitCharacterCompletion.documentation = documentation;
-					commitCharacterCompletion.detail = `Dynamic class that allows you to specify the CSS attribute within the square brackets "[]". Value for bg & color has to start with "#" followed by 3 or 6 characters`;
-
-					suggestionArray.push(commitCharacterCompletion);
-					uniqueLabels.add(dynamicClass);
-				}
-			});
-
-			completionItems.push(...new Set(suggestionArray));
 			//vscode.window.showInformationMessage('SwiftCSS is ready to be used!');
 			//loadingMessage?.dispose();
 
