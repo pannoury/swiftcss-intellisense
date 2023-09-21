@@ -83,7 +83,6 @@ export function processLineString(lineString: string, position: number){
 }
 
 export function extractInputString(input: string){
-    console.log(`Input: ${input}`);
     const reversedText = input.split('').reverse().join(''); // Reverse the text
 
     const regex = /[^A-Za-z0-9-]/; // Define the regex to match special characters

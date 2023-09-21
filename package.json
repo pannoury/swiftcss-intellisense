@@ -2,7 +2,7 @@
   "name": "swiftcss",
   "displayName": "SwiftCSS",
   "description": "Intellisense for SwiftCSS",
-  "publisher": "Patrick Tannoury",
+  "publisher": "PatrickTannoury",
   "icon": "logo_yellow.png",
   "version": "0.0.1",
   "engines": {
@@ -46,22 +46,22 @@
       {
         "id": "javascript",
         "aliases": ["JavaScript", "js"],
-        "extensions": [".js"]
+        "extensions": [".js", ".jsx"]
       },
       {
         "id": "javascriptreact",
         "aliases": ["JavaScript React", "jsx"],
-        "extensions": [".jsx"]
+        "extensions": [".jsx", ".js"]
       },
       {
         "id": "typescript",
         "aliases": ["TypeScript", "ts"],
-        "extensions": [".ts"]
+        "extensions": [".ts", ".tsx"]
       },
       {
         "id": "typescriptreact",
         "aliases": ["TypeScript React", "tsx"],
-        "extensions": [".tsx"]
+        "extensions": [".tsx", ".ts"]
       }
     ]
   },
