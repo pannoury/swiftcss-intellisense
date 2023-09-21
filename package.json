@@ -5,6 +5,10 @@
   "publisher": "PatrickTannoury",
   "icon": "logo_yellow.png",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pannoury/swiftcss-intellisense.git"
+  },
   "engines": {
     "vscode": "^1.82.0"
   },
@@ -45,23 +49,47 @@
       },
       {
         "id": "javascript",
-        "aliases": ["JavaScript", "js"],
-        "extensions": [".js", ".jsx"]
+        "aliases": [
+          "JavaScript",
+          "js"
+        ],
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
       },
       {
         "id": "javascriptreact",
-        "aliases": ["JavaScript React", "jsx"],
-        "extensions": [".jsx", ".js"]
+        "aliases": [
+          "JavaScript React",
+          "jsx"
+        ],
+        "extensions": [
+          ".jsx",
+          ".js"
+        ]
       },
       {
         "id": "typescript",
-        "aliases": ["TypeScript", "ts"],
-        "extensions": [".ts", ".tsx"]
+        "aliases": [
+          "TypeScript",
+          "ts"
+        ],
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
       },
       {
         "id": "typescriptreact",
-        "aliases": ["TypeScript React", "tsx"],
-        "extensions": [".tsx", ".ts"]
+        "aliases": [
+          "TypeScript React",
+          "tsx"
+        ],
+        "extensions": [
+          ".tsx",
+          ".ts"
+        ]
       }
     ]
   },
@@ -86,6 +114,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "culori": "^3.2.0"
+    "culori": "^3.2.0",
+    "swiftcss": "^1.13.0"
   }
 }
