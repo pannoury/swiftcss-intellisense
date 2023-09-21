@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { createObject, extractInputString, processLineString } from './createObject';
+import { createObject } from './createObject';
 import rangeReplace from './rangeReplace';
 
 export interface BaseStyle {
@@ -147,72 +147,3 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() { }
-
-const dynamicClasses = [
-	'bg', 'color', 'content', 'text'
-];
-
-const pseudoClasses = [
-	'active',
-	'any',
-	'any-link',
-	'checked',
-	'default',
-	'defined',
-	'dir',
-	'disabled',
-	'empty',
-	'enabled',
-	'first',
-	'first-child',
-	'first-of-type',
-	'fullscreen',
-	'focus',
-	'focus-visible',
-	'focus-within',
-	'has',
-	'hover',
-	'indeterminate',
-	'in-range',
-	'invalid',
-	'lang',
-	'last-child',
-	'last-of-type',
-	'link',
-	'not',
-	'nth-child',
-	'nth-last-child',
-	'nth-last-of-type',
-	'nth-of-type',
-	'only-child',
-	'only-of-type',
-	'optional',
-	'out-of-range',
-	'placeholder-shown',
-	'read-only',
-	'read-write',
-	'required',
-	'root',
-	'scope',
-	'target',
-	'target-within',
-	'user-invalid',
-	'valid',
-	'visited',
-	// Logical Combinations
-	'is',
-	'where',
-];
-
-const pseudoElements = [
-	'after',
-	'before',
-	'first-line',
-	'selection',
-	'placeholder',
-	'marker',
-	'backdrop',
-	'cue',
-	'part',
-	'slotted'
-];
