@@ -259,12 +259,9 @@ export function createObject(styleCSS: string) {
         uniqueLabels.add(dynamicClass);
     });
 
-    // Create a label fo className --> bg-0
-    /*
-    const classCompletionItem = new CompletionItem(cssClassString);
-    */
-    console.log(newClassObject);
-    console.log(uniqueAttributes);
+
+    //console.log(newClassObject);
+    //console.log(uniqueAttributes);
 
     completionItems.push(...new Set(suggestionArray));
     return completionItems;
