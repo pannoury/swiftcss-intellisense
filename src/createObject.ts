@@ -143,17 +143,21 @@ export function createObject(styleCSS: string) {
             //         
             try {
                 const cssAttribute = trimmedStyleBlock?.split('{')[1]?.trim().split(':')[0];
-                if(index >= 0 && index < 1000){
-                    console.log(cssAttribute);
-                }
-
                 if(!uniqueAttributes[cssAttribute]){
-                    uniqueAttributes[cssAttribute].attributes = [CLASS_NAME];
-                    uniqueAttributes[cssAttribute].example = classString;
-                } else if(uniqueAttributes[cssAttribute] && !uniqueAttributes[cssAttribute].attributes.includes(CLASS_NAME)){
-                    uniqueAttributes[cssAttribute].attributes.push(CLASS_NAME);
+                    uniqueAttributes[cssAttribute] = {
+                        attributes: [CLASS_NAME],
+                        example: classString
+                    };
+                } else if(uniqueAttributes[cssAttribute]){
+                    if(!uniqueAttributes[cssAttribute]?.attributes.includes(CLASS_NAME)){
+                        uniqueAttributes[cssAttribute].attributes.push(CLASS_NAME);
+                    } else {
+                        uniqueAttributes[cssAttribute].attributes = [CLASS_NAME];
+                    }
                 }
-            } catch (error) {}
+            } catch (error) {
+                console.log(`Error creating attribute object ${trimmedStyleBlock?.split('{')[1]?.trim().split(':')[0]}: ${error}, ${CLASS_NAME}`);
+            }
 
             // newClassObject
             if (!newClassObject[CLASS_NAME] && CLASS_NAME !== 'null' && CLASS_NAME) {
@@ -211,6 +215,20 @@ export function createObject(styleCSS: string) {
         }
 
     });
+
+    Object.keys(uniqueAttributes).forEach((key) => {
+        const { attributes, example } = uniqueAttributes[key];
+
+        const documentation = new MarkdownString();
+        documentation.appendCodeblock(`Example: ${example}`);
+        const commitCharacterCompletion = new CompletionItem(key, 6);
+        commitCharacterCompletion.detail = key;
+        commitCharacterCompletion.documentation = documentation;
+        commitCharacterCompletion.insertText = attributes[0];
+
+        suggestionArray.push(commitCharacterCompletion);
+        uniqueLabels.add(key);
+    });    
 
     pseudoClasses.forEach((pseudoClass) => {
         // Create the window that will show information
