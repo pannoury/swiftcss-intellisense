@@ -33,7 +33,7 @@ let cssPath: null | string = null;
 export async function activate(context: vscode.ExtensionContext) {
 	let config: Config | undefined | null; // Will hold the config file
 	const extensionDir = vscode.extensions.getExtension('PatrickTannoury.swiftcss')!.extensionPath;
-	const acceptedStyling = ['className', 'style-light', 'style-dark']; // We will push in screens provided in config file
+	const acceptedStyling = ['className', 'style-light', 'style-dark', 'class']; // We will push in screens provided in config file
 	
 	try {
 		const configFile = await vscode.workspace.findFiles('**/swiftcss.config.js');
@@ -88,7 +88,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	
 		// When the user makes an edit
 		vscode.workspace.onDidChangeTextDocument((event: vscode.TextDocumentChangeEvent) => {
-			const acceptedLanguages = ['javascript', 'javascriptreact', 'typescript', 'typesscriptreact'];
+			const acceptedLanguages = ['javascript', 'javascriptreact', 'typescript', 'typescriptreact'];
 			const position = event.contentChanges[0].range.start;
 			// Get the entire line string where the change occurred
 			const line = event.document.lineAt(position.line).text;
@@ -97,26 +97,17 @@ export async function activate(context: vscode.ExtensionContext) {
 				property: string
 			};
 	
-			// Find the first occurrence of '<'
-			const startIndex = line.indexOf('<');
+			// Find the first occurrence of '='
+			const startIndex = line.trim().indexOf("=");
 	
+			// This method does not work as intended...
 			if (startIndex !== -1) {
-				// Find the first space after '<'
-				const spaceIndex = line.indexOf(' ', startIndex);
+				const trimmedString = line.trim();
+				const elementProperty = trimmedString.substring(0, startIndex);
 	
-				if (spaceIndex !== -1) {
-					// Extract the substring from '<' to the first space
-					const extractedString = line.substring(spaceIndex + 1, line.length);
-	
-					const elementProperty = {
-						extractedString: extractedString,
-						property: extractedString.substring(0, extractedString.indexOf('='))
-					};
-	
-					// The property is within accepted properties
-					if (acceptedLanguages.includes(event.document.languageId) && acceptedStyling.includes(elementProperty?.property)) {
-						vscode.commands.executeCommand('editor.action.triggerSuggest');
-					}
+				// The property is within accepted properties
+				if (acceptedLanguages.includes(event.document.languageId) && acceptedStyling.includes(elementProperty)) {
+					vscode.commands.executeCommand('editor.action.triggerSuggest');
 				}
 			}
 	
