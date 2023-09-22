@@ -4,7 +4,7 @@
   "description": "Intellisense for SwiftCSS",
   "publisher": "PatrickTannoury",
   "icon": "logo_yellow.png",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/pannoury/swiftcss-intellisense.git"
