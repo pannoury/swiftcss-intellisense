@@ -20,10 +20,15 @@ export interface UniqueAttributes {
     }
 }
 
+export interface AllAttributes {
+    [key: string]: string[]
+}
+
 export const classNameObject = new Object as StyleObject;
 export const attributeObject = new Object as StyleObject;
 export const newClassObject = new Object as NewStyleObject;
 export const uniqueAttributes = new Object as UniqueAttributes;
+export const allAttributes = new Object as AllAttributes;
 
 export function createObject(styleCSS: string) {
     // Create completionItems
@@ -62,6 +67,10 @@ export function createObject(styleCSS: string) {
             const classAttributes = classAttribute?.split(';')?.filter(item => item !== "");
             const classString = classNameMatch[1]; // border-radius-600-px
             errorTrack = classString;
+
+            if(!allAttributes[classString as any]){
+                allAttributes[classString] = [...classAttributes];
+            }
 
             // Create the window that will show information
             const classDocumentation = new MarkdownString();
@@ -231,6 +240,21 @@ export function createObject(styleCSS: string) {
     });    
 
     pseudoClasses.forEach((pseudoClass) => {
+        // Create the window that will show information
+        const documentation = new MarkdownString();
+        documentation.appendCodeblock(`Attribute triggered when user ${pseudoClass}.`);
+        documentation.appendCodeblock(`Specified by ${pseudoClass}:<SwiftCSS class>`);
+
+        const commitCharacterCompletion = new CompletionItem(`${pseudoClass}:`, 6);
+        commitCharacterCompletion.commitCharacters = ['.'];
+        commitCharacterCompletion.documentation = documentation;
+        commitCharacterCompletion.detail = `${pseudoClass}: Add a CSS attribute to be triggered when user makes a certain action`;
+
+        suggestionArray.push(commitCharacterCompletion);
+        uniqueLabels.add(pseudoClass);
+    });
+
+    pseudoElements.forEach((pseudoClass) => {
         // Create the window that will show information
         const documentation = new MarkdownString();
         documentation.appendCodeblock(`Attribute triggered when user ${pseudoClass}.`);

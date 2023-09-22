@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { createObject } from './createObject';
 import rangeReplace from './rangeReplace';
+import { hoverProvider } from './hoverProvider';
 
 export interface BaseStyle {
 	[key: string]: string[];
@@ -104,10 +105,21 @@ export async function activate(context: vscode.ExtensionContext) {
 			if (startIndex !== -1) {
 				const trimmedString = line.trim();
 				const elementProperty = trimmedString.substring(0, startIndex);
+				console.log(elementProperty);
 	
-				// The property is within accepted properties
-				if (acceptedLanguages.includes(event.document.languageId) && acceptedStyling.includes(elementProperty)) {
-					vscode.commands.executeCommand('editor.action.triggerSuggest');
+				// If the word has a space --> Usually the string looks like this: <div className
+				if(elementProperty.includes(" ")){
+					const spaceIndex = elementProperty.indexOf(" ");
+					const fixedElementProperty = elementProperty.substring(spaceIndex +1, elementProperty.length);
+
+					if (acceptedLanguages.includes(event.document.languageId) && acceptedStyling.includes(fixedElementProperty)) {
+						vscode.commands.executeCommand('editor.action.triggerSuggest');
+					}
+				} else {
+					// The property is within accepted properties
+					if (acceptedLanguages.includes(event.document.languageId) && acceptedStyling.includes(elementProperty)) {
+						vscode.commands.executeCommand('editor.action.triggerSuggest');
+					}
 				}
 			}
 	
@@ -118,11 +130,9 @@ export async function activate(context: vscode.ExtensionContext) {
 			console.log(event);
 		});
 	
-		vscode.languages.registerHoverProvider('javascript', {
+		vscode.languages.registerHoverProvider('typescriptreact', {
 			provideHover(document, position, token) {
-				return {
-					contents: ['Hover Content']
-				};
+				return hoverProvider(document, position, token, acceptedStyling);
 			}
 		});
 		
