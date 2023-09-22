@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { createObject } from './createObject';
 import rangeReplace from './rangeReplace';
+import { hoverProvider } from './hoverProvider';
 
 export interface BaseStyle {
 	[key: string]: string[];
@@ -129,11 +130,9 @@ export async function activate(context: vscode.ExtensionContext) {
 			console.log(event);
 		});
 	
-		vscode.languages.registerHoverProvider('javascript', {
+		vscode.languages.registerHoverProvider('typescriptreact', {
 			provideHover(document, position, token) {
-				return {
-					contents: ['Hover Content']
-				};
+				return hoverProvider(document, position, token, acceptedStyling);
 			}
 		});
 		
