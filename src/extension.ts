@@ -104,10 +104,21 @@ export async function activate(context: vscode.ExtensionContext) {
 			if (startIndex !== -1) {
 				const trimmedString = line.trim();
 				const elementProperty = trimmedString.substring(0, startIndex);
+				console.log(elementProperty);
 	
-				// The property is within accepted properties
-				if (acceptedLanguages.includes(event.document.languageId) && acceptedStyling.includes(elementProperty)) {
-					vscode.commands.executeCommand('editor.action.triggerSuggest');
+				// If the word has a space --> Usually the string looks like this: <div className
+				if(elementProperty.includes(" ")){
+					const spaceIndex = elementProperty.indexOf(" ");
+					const fixedElementProperty = elementProperty.substring(spaceIndex +1, elementProperty.length);
+
+					if (acceptedLanguages.includes(event.document.languageId) && acceptedStyling.includes(fixedElementProperty)) {
+						vscode.commands.executeCommand('editor.action.triggerSuggest');
+					}
+				} else {
+					// The property is within accepted properties
+					if (acceptedLanguages.includes(event.document.languageId) && acceptedStyling.includes(elementProperty)) {
+						vscode.commands.executeCommand('editor.action.triggerSuggest');
+					}
 				}
 			}
 	
