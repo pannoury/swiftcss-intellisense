@@ -267,9 +267,7 @@ export function createObject(styleCSS: string) {
     return completionItems;
 }
 
-const dynamicClasses = [
-	'bg', 'color', 'content', 'text'
-];
+const dynamicClasses = ['bg', 'color', 'content', 'text', 'brd-color'];
 
 const pseudoClasses = [
 	'active',
