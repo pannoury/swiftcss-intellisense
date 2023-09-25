@@ -4,6 +4,7 @@ import * as path from 'path';
 import { createObject } from './createObject';
 import rangeReplace from './rangeReplace';
 import { hoverProvider } from './hoverProvider';
+import updateDecorations from './decoration';
 
 export interface BaseStyle {
 	[key: string]: string[];
@@ -68,6 +69,9 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Register a "Hello World" command
 		const disposable = vscode.commands.registerCommand('swiftcss.helloWorld', () => {
 			//loadingMessage = vscode.window.showInformationMessage('Loading Extension...', 'Cancel');
+			if(vscode.window.activeTextEditor){
+				updateDecorations(vscode.window.activeTextEditor);
+			}
 			vscode.window.showInformationMessage('SwiftCSS is ready to be used!');
 		});
 	
@@ -126,9 +130,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		});
 	
 		// When user changes the document of focus
-		vscode.window.onDidChangeActiveTextEditor((event: vscode.TextEditor | undefined) => {
-			console.log(event);
-		});
+		vscode.window.onDidChangeActiveTextEditor((editor: vscode.TextEditor | undefined) => {
+			if(editor){
+				updateDecorations(editor);
+			}
+		}, null, context.subscriptions);
 	
 		vscode.languages.registerHoverProvider('typescriptreact', {
 			provideHover(document, position, token) {

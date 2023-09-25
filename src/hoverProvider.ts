@@ -1,4 +1,4 @@
-import { TextDocument, Position, CancellationToken, Hover, Range, MarkdownString } from 'vscode';
+import { TextDocument, Position, CancellationToken, Hover, Range, MarkdownString, window, DecorationOptions } from 'vscode';
 import { uniqueAttributes, newClassObject, allAttributes } from './createObject';
 
 const acceptedLanguages = ['javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'html'];
@@ -76,16 +76,72 @@ export function hoverProvider(document: TextDocument, position: Position, tooken
         // Create the documentation
         const documentation = new MarkdownString(string, true);
 
-        interface Suggestion {
-            [key: string]: {
-                score: number
+        // If its a dynamic class (for colors)
+        if(string.includes('-[')){
+            const squareRegex = /\[(.*?)\]/g;
+            const dynamicValueRegex = string.match(squareRegex);
+
+            if(dynamicValueRegex){
+                const attributeName = string.split('-[')[0];
+                const dynamicValue = dynamicValueRegex[0].replace('[', '').replace(']', '');
+
+                console.log(dynamicValue.substring(0, 1), dynamicValue.length, dynamicValue);
+                if(dynamicValue.substring(0, 1) === "#" && (dynamicValue.length === 7 || dynamicValue.length === 4)){
+                    if(attributeName === 'color'){
+                        documentation.appendCodeblock(`.${string} {
+                            color: ${dynamicValue};
+                        }`, 'css');
+                    } else if(attributeName === 'bg'){
+                        documentation.appendCodeblock(`.${string} {
+                            background-color: ${dynamicValue};
+                        }`, 'css');
+                    } else if(attributeName === 'brd-color'){
+                        documentation.appendCodeblock(`.${string} {
+                            border-color: ${dynamicValue};
+                        }`, 'css');
+                    } else if (attributeName === 'bg'){
+                        documentation.appendCodeblock(`.${string} {
+                            background-color: ${dynamicValue};
+                        }`, 'css');
+                    } else if(attributeName === 'fill'){
+                        documentation.appendCodeblock(`.${string} {
+                            fill: ${dynamicValue};
+                        }`, 'css');
+                    }
+
+                    /*
+                    if (startIndex !== -1) {
+                        // Calculate the ending position by adding the length of the substring
+                        const endIndex = startIndex + string.length - 1;
+            
+                        const customRange = new Range(
+                            new Position(position.line, startIndex),
+                            new Position(position.line, endIndex + 1)
+                        );
+                        const decorationOptions: DecorationOptions[] = [
+                            {
+                                range: customRange,
+                                renderOptions: {
+                                    before: {
+                                        backgroundColor: `${dynamicValue}`
+                                    }
+                                }
+                            }
+                        ];
+
+                        window.visibleTextEditors
+                        .find((editor) => editor.document === document)
+                        ?.setDecorations(
+                            smallDecorator,
+                            decorationOptions
+                        );
+                    }
+                    */
+                }
             }
         }
-        const suggestions = new Object as Suggestion;
-
 
         if(allAttributes[string]){
-            console.log(allAttributes[string]);
             documentation.appendCodeblock(allAttributes[string].toString(), 'css');
         }
 
