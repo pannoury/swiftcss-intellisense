@@ -108,35 +108,6 @@ export function hoverProvider(document: TextDocument, position: Position, tooken
                             fill: ${dynamicValue};
                         }`, 'css');
                     }
-
-                    /*
-                    if (startIndex !== -1) {
-                        // Calculate the ending position by adding the length of the substring
-                        const endIndex = startIndex + string.length - 1;
-            
-                        const customRange = new Range(
-                            new Position(position.line, startIndex),
-                            new Position(position.line, endIndex + 1)
-                        );
-                        const decorationOptions: DecorationOptions[] = [
-                            {
-                                range: customRange,
-                                renderOptions: {
-                                    before: {
-                                        backgroundColor: `${dynamicValue}`
-                                    }
-                                }
-                            }
-                        ];
-
-                        window.visibleTextEditors
-                        .find((editor) => editor.document === document)
-                        ?.setDecorations(
-                            smallDecorator,
-                            decorationOptions
-                        );
-                    }
-                    */
                 }
             }
         }

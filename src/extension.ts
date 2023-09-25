@@ -30,7 +30,19 @@ export interface Config {
 	}
 }
 
+export interface DecorationObject {
+    [key: string]: [
+        {
+            key: string,
+            line: number,
+            range: vscode.Range,
+            value: string
+        }
+    ]
+}
+
 let cssPath: null | string = null;
+const decorationObject: DecorationObject = {};
 
 export async function activate(context: vscode.ExtensionContext) {
 	let config: Config | undefined | null; // Will hold the config file
@@ -70,7 +82,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const disposable = vscode.commands.registerCommand('swiftcss.helloWorld', () => {
 			//loadingMessage = vscode.window.showInformationMessage('Loading Extension...', 'Cancel');
 			if(vscode.window.activeTextEditor){
-				updateDecorations(vscode.window.activeTextEditor);
+				updateDecorations(vscode.window.activeTextEditor, decorationObject);
 			}
 			vscode.window.showInformationMessage('SwiftCSS is ready to be used!');
 		});
@@ -132,7 +144,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		// When user changes the document of focus
 		vscode.window.onDidChangeActiveTextEditor((editor: vscode.TextEditor | undefined) => {
 			if(editor){
-				updateDecorations(editor);
+				updateDecorations(editor, decorationObject);
 			}
 		}, null, context.subscriptions);
 	
