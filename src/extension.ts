@@ -55,6 +55,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	statusBarItem.command = 'swiftcss.start_extension';
 	statusBarItem.text = `$(sync-ignored)`;
+	statusBarItem.tooltip = isStatusBar ? "Turn of SwiftCSS" : "Turn on SwiftCSS";
 	statusBarItem.show();
 
 	context.subscriptions.push(statusBarItem);
@@ -140,7 +141,6 @@ export async function activate(context: vscode.ExtensionContext) {
 			if (startIndex !== -1) {
 				const trimmedString = line.trim();
 				const elementProperty = trimmedString.substring(0, startIndex);
-				console.log(elementProperty);
 
 				// If the word has a space --> Usually the string looks like this: <div className
 				if (elementProperty.includes(" ")) {
@@ -182,8 +182,9 @@ export async function activate(context: vscode.ExtensionContext) {
 					const endIndex = (match?.index + className.length);
 
 					console.log(string.substring(0, index));
-					console.log(string, character, line);
-					
+					console.log(string, character, line, className);
+
+					vscode.commands.executeCommand('editor.action.');
 				}
 			}
 		}, null, context.subscriptions);
