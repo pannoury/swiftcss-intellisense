@@ -85,7 +85,6 @@ export function hoverProvider(document: TextDocument, position: Position, tooken
                 const attributeName = string.split('-[')[0];
                 const dynamicValue = dynamicValueRegex[0].replace('[', '').replace(']', '');
 
-                console.log(dynamicValue.substring(0, 1), dynamicValue.length, dynamicValue);
                 if(dynamicValue.substring(0, 1) === "#" && (dynamicValue.length === 7 || dynamicValue.length === 4)){
                     if(attributeName === 'color'){
                         documentation.appendCodeblock(`.${string} {

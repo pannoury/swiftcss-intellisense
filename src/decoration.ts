@@ -65,12 +65,12 @@ function generateValues(position: Position, className: string, colorCode: string
     );
 
     const smallDecorator = window.createTextEditorDecorationType({
-        cursor: 'text-edit',
+        cursor: 'pointer',
         before: {
             width: '10px',
             height: '10px',
             contentText: ' ',
-            border: '0.1 em solid',
+            border: '1px solid',
             margin: '0.1em 0.2em 0',
         },
         dark: {

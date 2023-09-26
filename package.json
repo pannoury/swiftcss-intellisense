@@ -29,7 +29,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "swiftcss.helloWorld",
+        "command": "swiftcss.start_extension",
         "title": "SwiftCSS: Start Intellisense"
       }
     ],
