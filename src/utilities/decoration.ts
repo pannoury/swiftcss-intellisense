@@ -1,5 +1,5 @@
 import { Position, Range, TextEditor, window, DecorationOptions } from 'vscode';
-import { DecorationObject } from './extension';
+import { DecorationObject } from '../extension';
 
 export default function updateDecorations(editor: TextEditor, decorationObject: DecorationObject) {
     window.visibleTextEditors.forEach((editor) => {

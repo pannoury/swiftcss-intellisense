@@ -8,10 +8,18 @@
 		],
 		"sourceMap": true,
 		"rootDir": "src",
-		"strict": true   /* enable all strict type-checking options */
+		"strict": true,  /* enable all strict type-checking options */
 		/* Additional Checks */
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
 		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
 		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
+		// "moduleResolution": "node10",                     /* Specify how TypeScript looks up a file from a given module specifier. */
+		"baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
+		"paths": {
+			"@utilities/*": ["src/utilities/*"],
+			"@src/*": ["src/*"],
+			"@misc/*": ["src/utilities/misc/*"],
+			"@compiler/*": ["src/compiler/*"]
+		},  
 	}
 }
