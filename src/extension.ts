@@ -53,7 +53,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// create a new status bar item that we can now manage
 	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+	statusBarItem.command = 'swiftcss.start_extension';
+	statusBarItem.text = `$(sync-ignored)`;
+	statusBarItem.show();
 
+	context.subscriptions.push(statusBarItem);
 
 	try {
 		const configFile = await vscode.workspace.findFiles('**/swiftcss.config.js');
@@ -77,6 +81,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	} catch (err) {
 		console.log(err);
 		vscode.window.showErrorMessage("Missing swiftcss.config.js, please run 'npx swiftcss init' to create a config file, and then reactive this extension");
+		isStatusBar ? statusBarItem.text = `$(sync-ignored)` : undefined;
 		deactivate();
 	}
 
@@ -86,11 +91,13 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Register a "Hello World" command
 		const disposable = vscode.commands.registerCommand('swiftcss.start_extension', () => {
+			statusBarItem.text = `$(sync~spin)`;
 			//loadingMessage = vscode.window.showInformationMessage('Loading Extension...', 'Cancel');
 			if (vscode.window.activeTextEditor) {
 				updateDecorations(vscode.window.activeTextEditor, decorationObject);
 			}
 			vscode.window.showInformationMessage('SwiftCSS is ready to be used!');
+			statusBarItem.text = `$(sync)`;
 		});
 
 		const _provideCompletionItems = { provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) { return completionItems; } };

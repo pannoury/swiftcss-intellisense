@@ -28,12 +28,12 @@ export function hoverProvider(document: TextDocument, position: Position, tooken
         .map((e) => {
             if (e.includes("=")) {
                 const x = e.split("=").map((y) => {
-                    return y.replace(/["'`]/g, '');
+                    return y.replace(/["'`]/g, '').replace('>', '');
                 });
 
                 return x.splice(1);
             } else {
-                return e.replace(/["'`]/g, '');
+                return e.replace(/["'`]/g, '').replace('>', '');
             }
         })
         .flat();
@@ -110,6 +110,8 @@ export function hoverProvider(document: TextDocument, position: Position, tooken
                 }
             }
         }
+
+        console.log(string);
 
         if(allAttributes[string]){
             documentation.appendCodeblock(allAttributes[string].toString(), 'css');
