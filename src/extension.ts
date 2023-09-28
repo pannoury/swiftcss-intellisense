@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { createObject } from '@utilities/createObject';
-import { hoverProvider } from '@utilities/hoverProvider';
-import updateDecorations from '@utilities/decoration';
+import { createObject } from './utilities/createObject';
+import { hoverProvider } from './utilities/hoverProvider';
+import updateDecorations from './utilities/decoration';
 
 export interface BaseStyle {
 	[key: string]: string[];
