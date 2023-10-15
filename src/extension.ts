@@ -41,7 +41,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (configFile.length > 0) {
 			const hasModuleInstalled = configFile.find((path: vscode.Uri) => String(path).includes('node_modules/swiftcss'));
 			if(hasModuleInstalled){
-				cssPath = path.resolve(path.join(hasModuleInstalled.fsPath, 'dist', 'src', 'style.css')).replace('swiftcss.config.js/', '');
+				cssPath = path.resolve(path.join(path.dirname(hasModuleInstalled.fsPath), 'dist', 'src', 'style.css'));
 			} else {
 				vscode.window.showErrorMessage("Missing SwiftCSS package, please run 'npm install swiftcss' to install the package");
 				deactivate();

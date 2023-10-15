@@ -85,7 +85,7 @@ export function hoverProvider(document: TextDocument, position: Position, tooken
 
 
         if(allAttributes[string]){
-            console.log(allAttributes[string]);
+            //console.log(allAttributes[string]);
             documentation.appendCodeblock(allAttributes[string].toString(), 'css');
         }
 

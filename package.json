@@ -115,6 +115,6 @@
   },
   "dependencies": {
     "culori": "^3.2.0",
-    "swiftcss": "^1.13.0"
+    "swiftcss": "^3.9.0"
   }
 }
